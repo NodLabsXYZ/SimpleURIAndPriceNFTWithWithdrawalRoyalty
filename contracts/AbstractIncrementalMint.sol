@@ -22,21 +22,6 @@ abstract contract AbstractIncrementalMint is ERC721 {
         _baseTokenURI = baseTokenURI;
     }
 
-    function tokenURI(uint256 tokenId)
-        public
-        view
-        virtual
-        override
-        returns (string memory)
-    {
-        require(_exists(tokenId), "URI query for nonexistent token");
-
-        string memory base = _baseURI();
-
-        return
-            string(abi.encodePacked(base, Strings.toString(tokenId), ".json"));
-    }
-
     function _baseURI() internal view virtual override returns (string memory) {
         return _baseTokenURI;
     }
