@@ -50,10 +50,10 @@ contract('SimpleURIAndPriceNFTWithWithdrawalRoyalty', function ([ owner, other, 
 
   it('should generate the correct tokenURI on minting', async () => {
     const tokenURI1 = await contract.tokenURI(1)
-    expect(tokenURI1).to.equal(`${baseURI}1.json`)
+    expect(tokenURI1).to.equal(`${baseURI}1`)
     
     const tokenURI2 = await contract.tokenURI(2)
-    expect(tokenURI2).to.equal(`${baseURI}2.json`)
+    expect(tokenURI2).to.equal(`${baseURI}2`)
   })
 
   it('should collect the revenue from both mintings', async () => {
