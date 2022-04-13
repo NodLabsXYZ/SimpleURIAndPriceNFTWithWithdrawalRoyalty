@@ -4,9 +4,10 @@ const { constants } = ethers;
 
 const SimpleURIAndPriceNFTWithWithdrawalRoyalty = artifacts.require('SimpleURIAndPriceNFTWithWithdrawalRoyalty');
 
-contract('SimpleURIAndPriceNFTWithWithdrawalRoyalty', function ([ owner, other, other2 ]) {
+contract('SimpleURIAndPriceNFTWithWithdrawalRoyalty', function ([owner, other, other2]) {
   const price = constants.WeiPerEther.div(5) // 0.2 ETH
   const baseURI = "https://arweave.net/arweave_hash_value"
+  const initialMaxSupply = 5;
 
   let contract;
   let response;
@@ -17,7 +18,8 @@ contract('SimpleURIAndPriceNFTWithWithdrawalRoyalty', function ([ owner, other, 
       "SimpleURIAndPriceNFTWithWithdrawalRoyalty",
       "SIM",
       baseURI,
-      price, 
+      price,
+      initialMaxSupply,
       { from: owner }
     );
     response = await contract.mint({ from: other, value: price.toString() })
@@ -51,7 +53,7 @@ contract('SimpleURIAndPriceNFTWithWithdrawalRoyalty', function ([ owner, other, 
   it('should generate the correct tokenURI on minting', async () => {
     const tokenURI1 = await contract.tokenURI(1)
     expect(tokenURI1).to.equal(`${baseURI}1`)
-    
+
     const tokenURI2 = await contract.tokenURI(2)
     expect(tokenURI2).to.equal(`${baseURI}2`)
   })
@@ -60,4 +62,16 @@ contract('SimpleURIAndPriceNFTWithWithdrawalRoyalty', function ([ owner, other, 
     const balance = await contract.balanceReceived({ from: owner })
     expect(balance.toString()).to.equal(price.mul(2).toString())
   })
+
+  it('onlyOwner can set max supply', async () => {
+    const newMaxSupply = 10;
+
+    await contract.setMaxSupply(newMaxSupply);
+    const actualMaxSupply = await contract.MAX_SUPPLY();
+
+    expect(actualMaxSupply.toNumber()).to.eq(newMaxSupply);
+
+    await contract.setMaxSupply(6, { from: other }).should.be.rejected;
+  });
+
 })

@@ -12,13 +12,18 @@ contract SimpleURIAndPriceNFTWithWithdrawalRoyalty is
         string memory name,
         string memory symbol,
         string memory baseURI,
-        uint256 priceInWei
+        uint256 priceInWei,
+        uint256 maxSupply
     )
-        AbstractIncrementalMint(name, symbol, baseURI)
+        AbstractIncrementalMint(name, symbol, baseURI, maxSupply)
         AbstractNodPriceAndWithdrawal(priceInWei)
     {}
 
     function mint() public payable requirePrice returns (uint256) {
         return _mintNextToken();
+    }
+
+    function setMaxSupply(uint256 newMaxSupply) public {
+        return _setMaxSupply(newMaxSupply);
     }
 }

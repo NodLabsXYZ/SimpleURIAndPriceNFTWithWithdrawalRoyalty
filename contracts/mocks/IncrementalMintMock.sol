@@ -7,10 +7,15 @@ contract IncrementalMintMock is AbstractIncrementalMint {
     constructor(
         string memory name,
         string memory symbol,
-        string memory baseURI
-    ) AbstractIncrementalMint(name, symbol, baseURI) {}
+        string memory baseURI,
+        uint256 maxSupply
+    ) AbstractIncrementalMint(name, symbol, baseURI, maxSupply) {}
 
     function mint() public payable returns (uint256) {
         return _mintNextToken();
+    }
+
+    function setMaxSupply(uint256 newMaxSupply) public {
+        return _setMaxSupply(newMaxSupply);
     }
 }
